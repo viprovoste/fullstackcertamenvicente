@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.provoste.vicente.model.Evento;
 import com.provoste.vicente.service.EventoService;
 
+import jakarta.validation.Valid;
+
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -35,7 +37,7 @@ public class EventoController {
     }
     
     @PostMapping
-    public Evento agregarEvento(@RequestBody Evento evento) {
+    public Evento agregarEvento(@Valid @RequestBody Evento evento) {
         return eventoService.saveEvento(evento);
     }
 
@@ -50,7 +52,7 @@ public class EventoController {
     }
 
     @PutMapping("{id}")
-    public Evento actualizarEvento(@PathVariable int id, @RequestBody Evento evento){
+    public Evento actualizarEvento(@PathVariable int id,@Valid @RequestBody Evento evento){
         return eventoService.updateEvento(evento);
     }
     
