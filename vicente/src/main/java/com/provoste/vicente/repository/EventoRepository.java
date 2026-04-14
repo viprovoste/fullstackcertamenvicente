@@ -14,7 +14,7 @@ public class EventoRepository {
     private List<Evento> listaEventos = new ArrayList<>();
 
     //Retorna Eventos
-    public List<Evento> obtenerEvento(){
+    public List<Evento> obtenerEventos(){
         return listaEventos;
     }
 
