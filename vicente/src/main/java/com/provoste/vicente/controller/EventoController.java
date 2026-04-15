@@ -3,11 +3,10 @@ package com.provoste.vicente.controller;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import com.provoste.vicente.model.Evento;
-import com.provoste.vicente.service.EventoService;
 
 import jakarta.validation.Valid;
 
@@ -15,13 +14,12 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-import org.springframework.web.bind.annotation.RequestParam;
-
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PutMapping;
 
-
+import com.provoste.vicente.model.Evento;
+import com.provoste.vicente.service.EventoService;
 
 
 @RestController
@@ -37,28 +35,45 @@ public class EventoController {
     }
     
     @PostMapping
-    public Evento agregarEvento(@Valid @RequestBody Evento evento) {
-        return eventoService.saveEvento(evento);
+    public ResponseEntity<Evento> agregarEvento(@Valid @RequestBody Evento evento) {
+        Evento nuevoEvento = eventoService.saveEvento(evento);
+        return ResponseEntity.status(HttpStatus.CREATED).body(nuevoEvento); 
     }
 
     @GetMapping("{id}")
-    public Evento buscarEvento(@PathVariable int id){
-        return eventoService.getEventoId(id);
+    public ResponseEntity<Evento> buscarEvento(@PathVariable int id){
+        Evento evento = eventoService.getEventoId(id);
+
+        if (evento == null) {
+            return ResponseEntity.notFound().build();
+        }
+        return ResponseEntity.ok(evento);
     }
     
     @GetMapping(("/tipo_evento/{tipo_evento}"))
-    public Evento buscarPorTipoEvento(@PathVariable String tipo_evento) {
-        return eventoService.getEventoTipoEvento(tipo_evento);
+    public ResponseEntity<List<Evento>> buscarPorTipoEvento(@PathVariable String tipo_evento) {
+        List<Evento> eventos = eventoService.getEventoTipoEvento(tipo_evento);
+        return ResponseEntity.ok(eventos);
     }
 
     @PutMapping("{id}")
-    public Evento actualizarEvento(@PathVariable int id,@Valid @RequestBody Evento evento){
-        return eventoService.updateEvento(evento);
+    public ResponseEntity<Evento> actualizarEvento(@PathVariable int id,@Valid @RequestBody Evento evento){
+        Evento eventoExistente = eventoService.getEventoId(id);
+        if (eventoExistente == null) {
+            return ResponseEntity.notFound().build();
+        }
+    eventoService.updateEvento(evento);
+        return ResponseEntity.ok(evento);
     }
     
     @DeleteMapping("{id}")
-    public String eliminarEvento(@PathVariable int id) {
-        return eventoService.deleteEvento(id);
+    public ResponseEntity<String> eliminarEvento(@PathVariable int id) {
+        Evento eventoExistente = eventoService.getEventoId(id);
+        if (eventoExistente == null) {
+            return ResponseEntity.notFound().build();
+        }
+        eventoService.deleteEvento(id);
+        return ResponseEntity.ok("Evento Eliminado");
     }
     
 }
