@@ -29,13 +29,15 @@ public class EventoRepository {
     }
 
     //Buscar por tipo evento (informacion especifica)
-    public Evento buscarPorTipoEvento(String tipo_evento) {
+    public List<Evento> buscarPorTipoEvento(String tipo_evento) {
+        List<Evento> resultados = new ArrayList<>();
+
         for (Evento evento : listaEventos){
             if (evento.getTipo_evento().equals(tipo_evento)) {
-                return evento;
+                resultados.add(evento);
             }
         }
-        return null;
+        return resultados;
     }
 
     //Guardarr
