@@ -25,7 +25,7 @@ public class EventoService {
         return eventoRepository.buscarPorId(id);
     }
 
-    public Evento getEventoTipoEvento(String tipo_evento) {
+    public List<Evento> getEventoTipoEvento(String tipo_evento) {
         return eventoRepository.buscarPorTipoEvento(tipo_evento);
     }
 
